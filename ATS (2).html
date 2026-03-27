@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Addis Transport System (ATS) | Smart Mobility for Ethiopia</title>
+  <!-- Tailwind CSS + Font Awesome Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ----- DESIGN SYSTEM - Primary: #006ad4 ----- */
+    :root {
+      --primary: #006ad4;
+      --primary-dark: #0052a3;
+      --primary-light: #e6f0ff;
+      --primary-soft: #3a86ff;
+      --secondary: #f5a462;
+      --secondary-dark: #E76F51;
+      --accent: #2A9D8F;
+      --success: #2A9D8F;
+      --warning: #E9C46A;
+      --error: #E76F51;
+      --light-bg: #F8F9FA;
+      --card-bg: #FFFFFF;
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+      overflow-x: hidden;
+    }
+
+    /* Smooth animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.9; }
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .animate-slideInLeft {
+      animation: slideInLeft 0.5s ease-out;
+    }
+
+    .page-transition {
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    /* Button press & card animations */
+    .btn-press {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-press:active {
+      transform: scale(0.96);
+    }
+
+    .hover-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .hover-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 25px -12px rgba(0, 106, 212, 0.2);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #E9ECEF;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #006ad4;
+      border-radius: 10px;
+    }
+
+    /* Glass morphism */
+    .glass {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    /* AI Prediction Pulse Animation */
+    .ai-pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* Offline indicator */
+    .offline-badge {
+      animation: fadeInUp 0.3s ease-out;
+    }
+
+    /* Link hover effects */
+    .quick-link {
+      transition: all 0.2s ease;
+    }
+    .quick-link:hover {
+      transform: translateX(5px);
+      color: #006ad4;
+    }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, #006ad4 0%, #F4A261 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* FAQ Accordion */
+    .faq-question {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .faq-answer.active {
+      max-height: 500px;
+    }
+
+    /* AI Demand Card with Image Overlay */
+    .demand-card {
+      position: relative;
+      border-radius: 1rem;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .demand-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 25px -12px rgba(0, 106, 212, 0.3);
+    }
+    
+    .demand-card-image {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .demand-card:hover .demand-card-image {
+      transform: scale(1.08);
+    }
+    
+    .demand-card-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.5), transparent);
+      padding: 1.5rem;
+      color: white;
+   
+    }
+    
+    .demand-card-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .demand-card-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(0, 106, 212, 0.9);
+      backdrop-filter: blur(4px);
+      padding: 0.25rem 0.75rem;
+      border-radius: 2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      z-index: 10;
+    }
+    
+    .demand-card-stats {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      opacity: 0.9;
+    }
+    
+    .demand-card-progress {
+      margin-top: 0.75rem;
+      height: 0.5rem;
+      background: rgba(255,255,255,0.3);
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+    
+    .demand-card-progress-bar {
+      height: 100%;
+      background: #006ad4;
+      border-radius: 1rem;
+      transition: width 0.3s ease;
+    }
+
+    /* Nav active */
+    .nav-active {
+      color: #006ad4;
+      font-weight: 600;
+      position: relative;
+    }
+    .nav-active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #006ad4;
+      border-radius: 2px;
+      animation: slideInLeft 0.3s ease-out;
+    }
+
+    /* Button styles */
+    .btn-primary {
+      background-color: #006ad4;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #0052a3;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(0, 106, 212, 0.4);
+    }
+
+    /* Attractive Driver Submit Button */
+    .driver-submit-btn {
+      background: linear-gradient(135deg, #F4A261 0%, #E76F51 50%, #F4A261 100%);
+      background-size: 200% auto;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .driver-submit-btn:hover {
+      background-position: right center;
+      transform: translateY(-3px);
+      box-shadow: 0 15px 25px -10px rgba(231, 111, 81, 0.5);
+    }
+    .driver-submit-btn:active {
+      transform: translateY(-1px);
+    }
+    .driver-submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s ease;
+    }
+    .driver-submit-btn:hover::before {
+      left: 100%;
+    }
+
+    /* Card shine effect */
+    .card-shine {
+      position: relative;
+      overflow: hidden;
+    }
+    .card-shine::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(115deg, rgba(255,255,255,0) 10%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 90%);
+      transform: rotate(25deg);
+      transition: transform 0.6s;
+    }
+    .card-shine:hover::after {
+      transform: rotate(25deg) translate(100%, -100%);
+    }
+
+    /* Form input focus */
+    .input-focus:focus {
+      border-color: #006ad4;
+      box-shadow: 0 0 0 3px rgba(0, 106, 212, 0.1);
+    }
+
+    /* Registration tabs */
+    .reg-tab {
+      transition: all 0.3s ease;
+    }
+    .reg-tab.active {
+      background-color: #006ad4;
+      color: white;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeInUp 0.2s ease-out;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 1.5rem;
+      max-width: 90%;
+      width: 400px;
+      animation: modalFadeIn 0.3s ease-out;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="glass shadow-lg sticky top-0 z-40 border-b border-gray-200">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-3 cursor-pointer group" onclick="showPage('home')">
+          <i class="fas fa-bus text-2xl group-hover:scale-110 transition-transform" style="color: #006ad4;"></i>
+          <span class="font-bold text-xl gradient-text">ATS</span>
+          <span class="hidden sm:inline text-sm text-gray-600">Addis Transport System</span>
+        </div>
+        
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex space-x-8">
+          <a href="#" onclick="showPage('home'); return false;" class="nav-link text-gray-700 hover:text-[#006ad4] font-medium transition" data-page="home">Home</a>
+          <a href="#" onclick="showPage('about'); return false;" class="nav-link text-gray-700 hover:text-[#006ad4] font-medium transition" data-page="about">About</a>
+          <a href="#" onclick="showPage('profiles'); return false;" class="nav-link text-gray-700 hover:text-[#006ad4] font-medium transition" data-page="profiles">Profiles</a>
+          <a href="#" onclick="showPage('register'); return false;" class="nav-link text-gray-700 hover:text-[#006ad4] font-medium transition" data-page="register">Register</a>
+          <a href="#" onclick="showPage('faq'); return false;" class="nav-link text-gray-700 hover:text-[#006ad4] font-medium transition" data-page="faq">FAQ</a>
+          <a href="#" onclick="showPage('ride'); return false;" class="nav-link text-gray-700 hover:text-[#006ad4] font-medium transition" data-page="ride">Book Ride</a>
+          <a href="#" onclick="showPage('schedule'); return false;" class="nav-link text-gray-700 hover:text-[#006ad4] font-medium transition" data-page="schedule">Schedule</a>
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden text-gray-600 focus:outline-none">
+          <i class="fas fa-bars text-2xl"></i>
+        </button>
+        
+        <!-- Offline Indicator -->
+        <div id="offline-indicator" class="hidden items-center space-x-2 text-white px-3 py-1 rounded-full text-sm offline-badge" style="background-color: #006ad4;">
+          <i class="fas fa-wifi"></i>
+          <span>Offline Mode</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Mobile Navigation Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 py-4 px-4 space-y-3">
+      <a href="#" onclick="showPage('home'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="mobile-nav-link block text-gray-700 hover:text-[#006ad4] py-2 transition">Home</a>
+      <a href="#" onclick="showPage('about'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="mobile-nav-link block text-gray-700 hover:text-[#006ad4] py-2 transition">About</a>
+      <a href="#" onclick="showPage('profiles'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="mobile-nav-link block text-gray-700 hover:text-[#006ad4] py-2 transition">Profiles</a>
+      <a href="#" onclick="showPage('register'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="mobile-nav-link block text-gray-700 hover:text-[#006ad4] py-2 transition">Register</a>
+      <a href="#" onclick="showPage('faq'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="mobile-nav-link block text-gray-700 hover:text-[#006ad4] py-2 transition">FAQ</a>
+      <a href="#" onclick="showPage('ride'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="mobile-nav-link block text-gray-700 hover:text-[#006ad4] py-2 transition">Book Ride</a>
+      <a href="#" onclick="showPage('schedule'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="mobile-nav-link block text-gray-700 hover:text-[#006ad4] py-2 transition">Schedule</a>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <div id="page-container" class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-screen"></div>
+
+  <!-- Footer with Contact Information -->
+  <footer class="rounded-2xl text-white p-8 mt-12 mx-4 sm:mx-6 lg:mx-8 mb-4" style="background-color: #1a2c3e;">
+    <div class="grid md:grid-cols-4 gap-8">
+      <div class="animate-fadeInUp">
+        <h4 class="font-bold text-lg mb-4 flex items-center gap-2"><i class="fas fa-bus text-2xl" style="color: #006ad4;"></i>Addis Transport System</h4>
+        <p class="text-gray-300 text-sm leading-relaxed">Smart, reliable, and offline-capable mobility solution for Ethiopia. Connecting communities with cutting-edge technology.</p>
+      </div>
+      <div>
+        <h5 class="font-semibold mb-3" style="color: #006ad4;">Quick Links</h5>
+        <ul class="space-y-2 text-sm text-gray-300">
+          <li><a href="#" onclick="showPage('home'); return false;" class="quick-link inline-flex items-center gap-2 hover:text-[#006ad4] transition"><i class="fas fa-chevron-right text-xs"></i>Home</a></li>
+          <li><a href="#" onclick="showPage('ride'); return false;" class="quick-link inline-flex items-center gap-2 hover:text-[#006ad4] transition"><i class="fas fa-chevron-right text-xs"></i>Request Ride</a></li>
+          <li><a href="#" onclick="showPage('schedule'); return false;" class="quick-link inline-flex items-center gap-2 hover:text-[#006ad4] transition"><i class="fas fa-chevron-right text-xs"></i>View Schedule</a></li>
+          <li><a href="#" onclick="showPage('register'); return false;" class="quick-link inline-flex items-center gap-2 hover:text-[#006ad4] transition"><i class="fas fa-chevron-right text-xs"></i>Register</a></li>
+          <li><a href="#" onclick="toggleOfflineMode(); return false;" class="quick-link inline-flex items-center gap-2 hover:text-[#006ad4] transition"><i class="fas fa-chevron-right text-xs"></i>Offline Mode</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-semibold mb-3" style="color: #006ad4;">Contact Information</h5>
+        <ul class="space-y-3 text-sm text-gray-300">
+          <li class="flex items-center gap-3"><i class="fas fa-phone-alt w-5" style="color: #006ad4;"></i><span>+251-911-123456</span></li>
+          <li class="flex items-center gap-3"><i class="fas fa-envelope w-5" style="color: #006ad4;"></i><span>support@addistransport.com</span></li>
+          <li class="flex items-center gap-3"><i class="fas fa-map-marker-alt w-5" style="color: #006ad4;"></i><span>Addis Ababa, Ethiopia</span></li>
+          <li class="flex items-center gap-3"><i class="fas fa-clock w-5" style="color: #006ad4;"></i><span>24/7 Customer Support</span></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-semibold mb-3" style="color: #006ad4;">Follow Us</h5>
+        <div class="flex space-x-4 mb-4">
+          <i class="fab fa-facebook text-xl hover:text-[#006ad4] cursor-pointer transition-transform hover:scale-110"></i>
+          <i class="fab fa-twitter text-xl hover:text-[#006ad4] cursor-pointer transition-transform hover:scale-110"></i>
+          <i class="fab fa-instagram text-xl hover:text-[#006ad4] cursor-pointer transition-transform hover:scale-110"></i>
+          <i class="fab fa-telegram text-xl hover:text-[#006ad4] cursor-pointer transition-transform hover:scale-110"></i>
+        </div>
+        <div class="mt-4">
+          <p class="text-xs text-gray-400">Download our app</p>
+          <div class="flex space-x-3 mt-2">
+            <i class="fab fa-google-play text-2xl hover:text-[#006ad4] cursor-pointer transition"></i>
+            <i class="fab fa-apple text-2xl hover:text-[#006ad4] cursor-pointer transition"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-400">
+      <p>© 2024 Addis Transport System | Smart Mobility for a Connected Ethiopia 🚀</p>
+      <p class="text-xs mt-2">AI-Powered • Offline-First • Always Reliable</p>
+    </div>
+  </footer>
+
+  <script>
+    // ---------- GLOBAL STATE ----------
+    let currentPage = 'home';
+    let activeRideStatus = 'idle';
+    let currentPickup = "Bole Medhanialem";
+    let currentDestination = "Piassa";
+    let isOffline = false;
+    let isLoggedIn = false;
+    let currentUser = null;
+    
+    // Store registered users (with passwords)
+    let registeredPassengers = [];
+    let registeredDrivers = [];
+    
+    // Predictive AI Data - High Demand Areas with Images and Text Overlay
+    let highDemandAreas = [
+      { 
+        area: "Meskel Square", 
+        demand: "Very High", 
+        eta: "2-3 min", 
+        timeSlot: "8:00-10:00 AM", 
+        icon: "fa-flag-checkered", 
+        vehicles: 24,
+        image: "meskel.jpg",
+        description: "Iconic square and major transport hub",
+        shortDesc: "Addis Ababa's most vibrant public square"
+      },
+      { 
+        area: "Bole International Airport", 
+        demand: "High", 
+        eta: "3-5 min", 
+        timeSlot: "All Day", 
+        icon: "fa-plane", 
+        vehicles: 18,
+        image: "bole2.jpg",
+        description: "Ethiopia's main international gateway",
+        shortDesc: "24/7 service with premium transport"
+      },
+      { 
+        area: "Mexico Square", 
+        demand: "High", 
+        eta: "3-4 min", 
+        timeSlot: "5:00-7:00 PM", 
+        icon: "fa-city", 
+        vehicles: 15,
+        image: "mexico.jpg",
+        description: "Busy commercial intersection",
+        shortDesc: "Central business district hub"
+      },
+      { 
+        area: "Piassa", 
+        demand: "Medium-High", 
+        eta: "4-6 min", 
+        timeSlot: "9:00-11:00 AM", 
+        icon: "fa-landmark", 
+        vehicles: 12,
+        image: "piyassa.jpg",
+        description: "Historic district & shopping area",
+        shortDesc: "Historic heart of Addis Ababa"
+      },
+      { 
+        area: "4kilo", 
+        demand: "Medium", 
+        eta: "5-7 min", 
+        timeSlot: "4:00-6:00 PM", 
+        icon: "fa-industry", 
+        vehicles: 8,
+        image: "4 kilo.jpg",
+        description: "Industrial and residential area",
+        shortDesc: "Growing residential & commercial zone"
+      }
+    ];
+    
+    // Mock Drivers
+    const mockDrivers = [
+      { id: 1, name: 'Abel T.', distance: '0.3 km', rating: 4.9, vehicle: 'Toyota Corolla', eta: '2 min', plate: 'AA-1234' },
+      { id: 2, name: 'Meron D.', distance: '0.7 km', rating: 4.8, vehicle: 'Hyundai Accent', eta: '4 min', plate: 'AA-5678' },
+      { id: 3, name: 'Dawit K.', distance: '1.2 km', rating: 4.7, vehicle: 'Kia Rio', eta: '6 min', plate: 'AB-9012' },
+    ];
+    
+    // Schedule Data
+    const busSchedule = [
+      { route: 'Meskel Square → Bole', time: '05:30', next: '15 min', fare: '15 ETB' },
+      { route: 'Piassa → Mexico', time: '06:00', next: '45 min', fare: '12 ETB' },
+      { route: 'Kazanchis → Ayat', time: '06:15', next: '1h', fare: '20 ETB' },
+      { route: 'Bole → Saris', time: '07:00', next: '1h 45m', fare: '18 ETB' },
+    ];
+    
+    const trainSchedule = [
+      { route: 'Lideta → Kaliti', time: '06:00', next: '30 min', fare: '8 ETB' },
+      { route: 'Ayat → Tor Hailoch', time: '07:10', next: '1h 40m', fare: '10 ETB' },
+      { route: 'Kality → Lebu', time: '08:00', next: '2h 30m', fare: '12 ETB' },
+    ];
+    
+    // FAQ Data
+    const faqData = [
+      { q: "How does offline mode work?", a: "ATS saves your ride requests, driver responses, and all actions locally on your device when you're offline. Once you regain internet connection, everything syncs automatically." },
+      { q: "How do I become a driver?", a: "Simply register as a driver through our registration page. You'll need to provide your driver's license, vehicle details, and complete a brief verification process." },
+      { q: "What payment methods are accepted?", a: "We accept cash payments and Telebirr mobile money. Card payments will be available in the next update." },
+      { q: "Is my personal information secure?", a: "Absolutely! We use industry-standard encryption and security protocols. Your data is never shared with third parties." },
+      { q: "How does AI demand prediction work?", a: "Our AI analyzes historical data, real-time traffic patterns, and special events to predict high-demand areas, reducing wait times by up to 40%." },
+      { q: "What areas does ATS cover?", a: "Currently, we operate across all sub-cities of Addis Ababa including Bole, Kirkos, Lideta, and beyond." }
+    ];
+    
+    // Toast Notification
+    function showToast(message, type = 'info') {
+      let container = document.getElementById('toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'fixed top-20 right-4 left-4 md:left-auto md:right-8 z-50 space-y-2 pointer-events-none';
+        document.body.appendChild(container);
+      }
+      
+      const toast = document.createElement('div');
+      let bgColor = '#006ad4';
+      if (type === 'success') bgColor = '#2A9D8F';
+      else if (type === 'error') bgColor = '#E76F51';
+      else if (type === 'warning') bgColor = '#E9C46A';
+      
+      const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+      
+      toast.className = `text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 transform transition-all duration-300 translate-x-full`;
+      toast.style.backgroundColor = bgColor;
+      toast.innerHTML = `<i class="fas ${icon}"></i><span class="flex-1 text-sm">${message}</span>`;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+        toast.classList.add('translate-x-0');
+      }, 10);
+      
+      setTimeout(() => {
+        toast.classList.remove('translate-x-0');
+        toast.classList.add('translate-x-full');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+    
+    // Login Modal Functions
+    function showLoginModal() {
+      const modalHTML = `
+        <div id="login-modal" class="modal-overlay" onclick="closeLoginModal(event)">
+          <div class="modal-content p-6" onclick="event.stopPropagation()">
+            <div class="text-center mb-6">
+              <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                <i class="fas fa-user-circle text-3xl" style="color: #006ad4;"></i>
+              </div>
+              <h2 class="text-2xl font-bold text-gray-800">Welcome Back</h2>
+              <p class="text-gray-500 text-sm">Login to your ATS account</p>
+            </div>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                <div class="relative">
+                  <i class="fas fa-phone absolute left-3 top-3 text-gray-400"></i>
+                  <input type="tel" id="login-phone" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus" placeholder="+251 91 123 4567">
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                <div class="relative">
+                  <i class="fas fa-lock absolute left-3 top-3 text-gray-400"></i>
+                  <input type="password" id="login-password" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus" placeholder="Enter your password">
+                </div>
+              </div>
+              <button onclick="handleLogin()" class="w-full py-3 text-white rounded-xl font-semibold transition btn-press btn-primary mt-4">
+                <i class="fas fa-sign-in-alt mr-2"></i>Login
+              </button>
+              <p class="text-center text-sm text-gray-500 mt-4">
+                Don't have an account? 
+                <a href="#" onclick="closeLoginModal(); showPage('register'); return false;" class="font-semibold" style="color: #006ad4;">Register here</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      const existingModal = document.getElementById('login-modal');
+      if (existingModal) existingModal.remove();
+      
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeLoginModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      const modal = document.getElementById('login-modal');
+      if (modal) {
+        modal.remove();
+        document.body.style.overflow = '';
+      }
+    }
+    
+    function handleLogin() {
+      const phone = document.getElementById('login-phone')?.value;
+      const password = document.getElementById('login-password')?.value;
+      
+      if (!phone || !password) {
+        showToast("Please enter both phone number and password", "error");
+        return;
+      }
+      
+      // Check passenger users
+      const passengerUser = registeredPassengers.find(p => p.phone === phone && p.password === password);
+      const driverUser = registeredDrivers.find(d => d.phone === phone);
+      
+      if (passengerUser) {
+        isLoggedIn = true;
+        currentUser = passengerUser;
+        showToast(`Welcome back ${currentUser.name}!`, "success");
+        closeLoginModal();
+        updateNavForLogin();
+      } else if (driverUser) {
+        isLoggedIn = true;
+        currentUser = driverUser;
+        showToast(`Welcome back ${currentUser.name}!`, "success");
+        closeLoginModal();
+        updateNavForLogin();
+      } else if (phone === "251911123456" && password === "demo123") {
+        isLoggedIn = true;
+        currentUser = { name: "Demo User", phone: phone, type: "passenger" };
+        showToast("Welcome back Demo User!", "success");
+        closeLoginModal();
+        updateNavForLogin();
+      } else {
+        showToast("Invalid credentials. Please register first.", "error");
+      }
+    }
+    
+    function logout() {
+      isLoggedIn = false;
+      currentUser = null;
+      showToast("Logged out successfully", "success");
+      updateNavForLogin();
+      showPage('home');
+    }
+    
+    function updateNavForLogin() {
+      const desktopNav = document.querySelector('.hidden.md\\:flex');
+      const mobileNav = document.getElementById('mobile-menu');
+      
+      const existingUserMenu = document.querySelector('.relative.group');
+      if (existingUserMenu) existingUserMenu.remove();
+      
+      const existingLoginBtn = document.querySelector('.login-btn-desktop');
+      if (existingLoginBtn) existingLoginBtn.remove();
+      
+      if (isLoggedIn && currentUser) {
+        const userMenu = document.createElement('div');
+        userMenu.className = 'relative group';
+        userMenu.innerHTML = `
+          <button class="flex items-center gap-2 text-gray-700 hover:text-[#006ad4] font-medium transition">
+            <i class="fas fa-user-circle text-xl"></i>
+            <span>${currentUser.name.split(' ')[0]}</span>
+            <i class="fas fa-chevron-down text-xs"></i>
+          </button>
+          <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden group-hover:block z-50">
+            <a href="#" onclick="showPage('profile'); return false;" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
+            <a href="#" onclick="showPage('ride'); return false;" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Rides</a>
+            <hr class="my-1">
+            <a href="#" onclick="logout(); return false;" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Logout</a>
+          </div>
+        `;
+        desktopNav?.appendChild(userMenu);
+        
+        const existingMobileUser = document.querySelector('.mobile-login-btn');
+        if (existingMobileUser) existingMobileUser.remove();
+        
+        const mobileUserDiv = document.createElement('div');
+        mobileUserDiv.className = 'mobile-login-btn border-t border-gray-200 pt-3 mt-2';
+        mobileUserDiv.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-user-circle text-xl" style="color: #006ad4;"></i>
+              <span class="font-medium text-gray-700">${currentUser.name}</span>
+            </div>
+            <button onclick="logout()" class="text-sm text-red-600">Logout</button>
+          </div>
+        `;
+        mobileNav?.appendChild(mobileUserDiv);
+      } else {
+        const loginBtn = document.createElement('button');
+        loginBtn.className = 'login-btn-desktop text-gray-700 hover:text-[#006ad4] font-medium transition flex items-center gap-2';
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i>Login';
+        loginBtn.onclick = () => showLoginModal();
+        desktopNav?.appendChild(loginBtn);
+        
+        const existingMobileUser = document.querySelector('.mobile-login-btn');
+        if (existingMobileUser) existingMobileUser.remove();
+        
+        const mobileLoginBtn = document.createElement('div');
+        mobileLoginBtn.className = 'mobile-login-btn border-t border-gray-200 pt-3 mt-2';
+        mobileLoginBtn.innerHTML = `
+          <button onclick="showLoginModal()" class="w-full text-left text-gray-700 hover:text-[#006ad4] py-2 transition flex items-center gap-2">
+            <i class="fas fa-sign-in-alt"></i>Login to Account
+          </button>
+        `;
+        mobileNav?.appendChild(mobileLoginBtn);
+      }
+    }
+    
+    // Request Ride
+    function requestRide() {
+      if (!isLoggedIn) {
+        showToast("Please login to book a ride", "warning");
+        showLoginModal();
+        return;
+      }
+      if (!currentPickup || !currentDestination) {
+        showToast("Please enter pickup and destination", "error");
+        return;
+      }
+      activeRideStatus = 'requested';
+      showToast("Ride requested! AI matching with nearby drivers...", "success");
+      setTimeout(() => {
+        if (activeRideStatus === 'requested') {
+          activeRideStatus = 'accepted';
+          showToast("Driver assigned! Arriving in 3 min", "success");
+          renderRidePage();
+        }
+      }, 2000);
+      renderRidePage();
+    }
+    
+    // Toggle Offline Mode
+    function toggleOfflineMode() {
+      isOffline = !isOffline;
+      updateOfflineUI();
+      showToast(isOffline ? "Offline Mode: Actions saved locally. Will sync when online." : "Online Mode: Ready to sync your data", isOffline ? "warning" : "success");
+    }
+    
+    function updateOfflineUI() {
+      const indicator = document.getElementById('offline-indicator');
+      if (isOffline) {
+        indicator?.classList.remove('hidden');
+        indicator?.classList.add('flex');
+      } else {
+        indicator?.classList.add('hidden');
+      }
+    }
+    
+    function updateActiveNav(page) {
+      document.querySelectorAll('.nav-link').forEach(link => {
+        if (link.getAttribute('data-page') === page) {
+          link.classList.add('nav-active');
+        } else {
+          link.classList.remove('nav-active');
+        }
+      });
+    }
+    
+    // Registration Functions with Password
+    function registerPassenger() {
+      const name = document.getElementById('passenger-name')?.value;
+      const phone = document.getElementById('passenger-phone')?.value;
+      const password = document.getElementById('passenger-password')?.value;
+      const confirmPassword = document.getElementById('passenger-confirm-password')?.value;
+      
+      if (!name || !phone || !password || !confirmPassword) {
+        showToast("Please fill in all fields", "error");
+        return;
+      }
+      
+      if (!/^[0-9+\-\s]{9,15}$/.test(phone)) {
+        showToast("Please enter a valid phone number", "error");
+        return;
+      }
+      
+      if (password.length < 6) {
+        showToast("Password must be at least 6 characters", "error");
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        showToast("Passwords do not match", "error");
+        return;
+      }
+      
+      // Check if phone already registered
+      if (registeredPassengers.some(p => p.phone === phone) || registeredDrivers.some(d => d.phone === phone)) {
+        showToast("Phone number already registered. Please login.", "error");
+        return;
+      }
+      
+      const newPassenger = {
+        id: Date.now(),
+        name: name,
+        phone: phone,
+        password: password,
+        type: 'passenger',
+        registeredAt: new Date().toLocaleString()
+      };
+      
+      registeredPassengers.push(newPassenger);
+      showToast(`Welcome ${name}! You've successfully registered as a passenger. Please login to continue.`, "success");
+      
+      // Clear form
+      document.getElementById('passenger-name').value = '';
+      document.getElementById('passenger-phone').value = '';
+      document.getElementById('passenger-password').value = '';
+      document.getElementById('passenger-confirm-password').value = '';
+      
+      setTimeout(() => {
+        showLoginModal();
+      }, 1500);
+    }
+    
+    function registerDriver() {
+      const name = document.getElementById('driver-name')?.value;
+      const phone = document.getElementById('driver-phone')?.value;
+      const license = document.getElementById('driver-license')?.value;
+      const vehicle = document.getElementById('driver-vehicle')?.value;
+      const plate = document.getElementById('driver-plate')?.value;
+      
+      if (!name || !phone || !license || !vehicle || !plate) {
+        showToast("Please fill in all fields", "error");
+        return;
+      }
+      
+      if (!/^[0-9+\-\s]{9,15}$/.test(phone)) {
+        showToast("Please enter a valid phone number", "error");
+        return;
+      }
+      
+      // Check if phone already registered
+      if (registeredPassengers.some(p => p.phone === phone) || registeredDrivers.some(d => d.phone === phone)) {
+        showToast("Phone number already registered. Please login.", "error");
+        return;
+      }
+      
+      const newDriver = {
+        id: Date.now(),
+        name: name,
+        phone: phone,
+        license: license,
+        vehicle: vehicle,
+        plate: plate,
+        type: 'driver',
+        registeredAt: new Date().toLocaleString(),
+        verified: false
+      };
+      
+      registeredDrivers.push(newDriver);
+      showToast(`Welcome ${name}! Your driver application has been submitted for verification. We'll contact you within 48 hours.`, "success");
+      
+      // Clear form
+      document.getElementById('driver-name').value = '';
+      document.getElementById('driver-phone').value = '';
+      document.getElementById('driver-license').value = '';
+      document.getElementById('driver-vehicle').value = '';
+      document.getElementById('driver-plate').value = '';
+    }
+    
+    // REGISTRATION PAGE with Password and Attractive Driver Button
+    function renderRegistrationPage() {
+      return `
+        <div class="page-transition">
+          <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Join <span class="gradient-text">ATS</span></h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Choose your role and become part of Ethiopia's smartest transport network</p>
+          </div>
+          
+          <div class="max-w-4xl mx-auto">
+            <div class="flex gap-2 mb-8 bg-gray-100 p-1 rounded-xl">
+              <button id="passenger-tab-btn" class="reg-tab flex-1 py-3 rounded-lg font-semibold transition text-gray-700 active" onclick="switchRegTab('passenger')">
+                <i class="fas fa-user mr-2"></i>Register as Passenger
+              </button>
+              <button id="driver-tab-btn" class="reg-tab flex-1 py-3 rounded-lg font-semibold transition text-gray-700" onclick="switchRegTab('driver')">
+                <i class="fas fa-truck mr-2"></i>Register as Driver
+              </button>
+            </div>
+            
+            <!-- Passenger Registration Form with Password -->
+            <div id="passenger-reg-form" class="bg-white rounded-2xl shadow-xl p-8 hover-card">
+              <div class="text-center mb-6">
+                <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-user-plus text-3xl" style="color: #006ad4;"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Passenger Registration</h2>
+                <p class="text-gray-500 text-sm mt-1">Join as a rider to book eco-friendly rides</p>
+              </div>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                  <div class="relative">
+                    <i class="fas fa-user absolute left-3 top-3 text-gray-400"></i>
+                    <input type="text" id="passenger-name" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus transition" placeholder="Enter your full name">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                  <div class="relative">
+                    <i class="fas fa-phone absolute left-3 top-3 text-gray-400"></i>
+                    <input type="tel" id="passenger-phone" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus transition" placeholder="+251 91 123 4567">
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1">We'll use this for ride notifications and login</p>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                  <div class="relative">
+                    <i class="fas fa-lock absolute left-3 top-3 text-gray-400"></i>
+                    <input type="password" id="passenger-password" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus transition" placeholder="Create a password (min. 6 characters)">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                  <div class="relative">
+                    <i class="fas fa-check-circle absolute left-3 top-3 text-gray-400"></i>
+                    <input type="password" id="passenger-confirm-password" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus transition" placeholder="Confirm your password">
+                  </div>
+                </div>
+                <button onclick="registerPassenger()" class="w-full py-3 text-white rounded-xl font-semibold transition btn-press btn-primary mt-4">
+                  <i class="fas fa-check-circle mr-2"></i>Create Passenger Account
+                </button>
+              </div>
+            </div>
+            
+            <!-- Driver Registration Form with Attractive Submit Button -->
+            <div id="driver-reg-form" class="bg-white rounded-2xl shadow-xl p-8 hover-card hidden">
+              <div class="text-center mb-6">
+                <div class="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-id-card text-3xl" style="color: #F4A261;"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Driver Registration</h2>
+                <p class="text-gray-500 text-sm mt-1">Earn money by providing rides to passengers</p>
+              </div>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                  <div class="relative">
+                    <i class="fas fa-user absolute left-3 top-3 text-gray-400"></i>
+                    <input type="text" id="driver-name" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus transition" placeholder="Enter your full name">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                  <div class="relative">
+                    <i class="fas fa-phone absolute left-3 top-3 text-gray-400"></i>
+                    <input type="tel" id="driver-phone" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus transition" placeholder="+251 91 123 4567">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Driver's License Number</label>
+                  <div class="relative">
+                    <i class="fas fa-id-card absolute left-3 top-3 text-gray-400"></i>
+                    <input type="text" id="driver-license" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus transition" placeholder="Enter your license number">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Vehicle Model</label>
+                  <div class="relative">
+                    <i class="fas fa-car absolute left-3 top-3 text-gray-400"></i>
+                    <input type="text" id="driver-vehicle" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus transition" placeholder="e.g., Toyota Corolla">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">License Plate Number</label>
+                  <div class="relative">
+                    <i class="fas fa-hashtag absolute left-3 top-3 text-gray-400"></i>
+                    <input type="text" id="driver-plate" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus transition" placeholder="e.g., AA-1234">
+                  </div>
+                </div>
+                <button onclick="registerDriver()" class="driver-submit-btn w-full py-4 text-white rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg">
+                  <i class="fas fa-paper-plane text-lg"></i>
+                  <span>Submit Driver Application</span>
+                  <i class="fas fa-arrow-right text-sm opacity-70"></i>
+                </button>
+                <p class="text-xs text-gray-500 text-center mt-3 flex items-center justify-center gap-1">
+                  <i class="fas fa-shield-alt"></i> Your application will be reviewed within 48 hours
+                </p>
+              </div>
+            </div>
+            
+            <div class="mt-8 text-center">
+              <div class="relative"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-300"></div></div><div class="relative flex justify-center text-sm"><span class="px-4 bg-transparent text-gray-500">Already have an account?</span></div></div>
+              <button onclick="showLoginModal()" class="mt-6 w-full py-3 border-2 rounded-xl font-semibold transition btn-press flex items-center justify-center gap-2 hover:shadow-lg" style="border-color: #006ad4; color: #006ad4;"><i class="fas fa-sign-in-alt"></i>Login to Your Account</button>
+              <p class="text-xs text-gray-500 mt-4">Demo login: Phone: 251911123456 | Password: demo123</p>
+            </div>
+          </div>
+          
+          <div class="max-w-4xl mx-auto mt-12">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 text-center hover-card"><i class="fas fa-users text-3xl mb-2" style="color: #006ad4;"></i><p class="text-2xl font-bold text-gray-800">${registeredPassengers.length}</p><p class="text-sm text-gray-600">Registered Passengers</p></div>
+              <div class="bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl p-6 text-center hover-card"><i class="fas fa-truck text-3xl mb-2" style="color: #F4A261;"></i><p class="text-2xl font-bold text-gray-800">${registeredDrivers.length}</p><p class="text-sm text-gray-600">Driver Applications</p></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    
+    function switchRegTab(tab) {
+      const passengerForm = document.getElementById('passenger-reg-form');
+      const driverForm = document.getElementById('driver-reg-form');
+      const passengerBtn = document.getElementById('passenger-tab-btn');
+      const driverBtn = document.getElementById('driver-tab-btn');
+      
+      if (tab === 'passenger') {
+        passengerForm?.classList.remove('hidden');
+        driverForm?.classList.add('hidden');
+        passengerBtn?.classList.add('active');
+        driverBtn?.classList.remove('active');
+        passengerBtn?.classList.add('bg-[#006ad4]', 'text-white');
+        driverBtn?.classList.remove('bg-[#006ad4]', 'text-white');
+        driverBtn?.classList.add('text-gray-700');
+      } else {
+        passengerForm?.classList.add('hidden');
+        driverForm?.classList.remove('hidden');
+        driverBtn?.classList.add('active');
+        passengerBtn?.classList.remove('active');
+        driverBtn?.classList.add('bg-[#F4A261]', 'text-white');
+        passengerBtn?.classList.remove('bg-[#006ad4]', 'text-white');
+        passengerBtn?.classList.add('text-gray-700');
+      }
+    }
+    
+    // HOME PAGE with Text Overlay on Images
+    function renderHomePage() {
+      return `
+        <div class="page-transition">
+          <!-- Hero Section -->
+          <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 mb-16 animate-fadeInUp card-shine">
+            <div class="grid md:grid-cols-2 gap-8 p-8 md:p-12">
+              <div class="space-y-6">
+                <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold" style="background-color: #e6f0ff; color: #006ad4;">
+                  <i class="fas fa-robot text-xs mr-2"></i>
+                  AI-Powered Smart Transport
+                </div>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                  Smart Mobility for
+                  <span class="gradient-text">Addis Ababa</span>
+                </h1>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                  <span class="font-semibold" style="color: #006ad4;">ATS (Addis Transport System)</span> is Ethiopia's first AI-powered, offline-capable transport platform. 
+                  We combine predictive analytics, real-time demand forecasting, and reliable service to create a seamless 
+                  mobility ecosystem for all Ethiopians.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-4">
+                  <button onclick="showPage('ride')" class="px-8 py-3 text-white rounded-xl font-semibold transition btn-press shadow-lg flex items-center gap-2 btn-primary"><i class="fas fa-taxi"></i>Request Ride</button>
+                  <button onclick="showPage('register')" class="px-8 py-3 border-2 rounded-xl font-semibold transition btn-press flex items-center gap-2" style="border-color: #006ad4; color: #006ad4;"><i class="fas fa-user-plus"></i>Join ATS</button>
+                  <button onclick="toggleOfflineMode()" class="px-8 py-3 border-2 rounded-xl font-semibold transition btn-press flex items-center gap-2" style="border-color: #F4A261; color: #F4A261;"><i class="fas fa-wifi"></i>${isOffline ? 'Go Online' : 'Offline Mode'}</button>
+                </div>
+                <div class="flex flex-wrap items-center gap-6 pt-4">
+                  <div class="flex items-center space-x-2"><i class="fas fa-brain" style="color: #006ad4;"></i><span class="text-sm text-gray-600">AI Demand Prediction</span></div>
+                  <div class="flex items-center space-x-2"><i class="fas fa-mobile-alt" style="color: #006ad4;"></i><span class="text-sm text-gray-600">Offline-First</span></div>
+                  <div class="flex items-center space-x-2"><i class="fas fa-shield-alt" style="color: #006ad4;"></i><span class="text-sm text-gray-600">Verified Drivers</span></div>
+                </div>
+              </div>
+              <div class="hidden md:flex items-center justify-center relative">
+                <div class="relative">
+                  <div class="absolute inset-0 rounded-full blur-3xl opacity-20 animate-pulse" style="background: linear-gradient(135deg, #006ad4 0%, #F4A261 100%);"></div>
+                  <div class="relative z-10 text-center">
+                    <i class="fas fa-bus text-8xl" style="color: #006ad4;"></i>
+                    <div class="absolute -top-4 -right-4 rounded-full p-2 shadow-lg animate-pulse" style="background-color: #F4A261;"><i class="fas fa-chart-line text-white text-sm"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Predictive AI - High Demand Areas with Text Overlay on Images -->
+          <div class="mb-16 animate-slideInLeft">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center ai-pulse" style="background-color: #006ad4;">
+                <i class="fas fa-brain text-white text-lg"></i>
+              </div>
+              <h2 class="text-2xl md:text-3xl font-bold text-gray-800">AI-Powered Demand Prediction</h2>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background-color: #e6f0ff; color: #006ad4;">Live Analytics</span>
+            </div>
+            <p class="text-gray-600 mb-6">Our AI analyzes real-time data, traffic patterns, and historical trends to predict high-demand areas, optimizing driver distribution and reducing wait times by up to 40%.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              ${highDemandAreas.map(area => `
+                <div class="demand-card" onclick="showToast('High demand area: ${area.area} - ${area.demand} demand. ${area.vehicles} drivers dispatched!', 'success')">
+                  <img src="${area.image}" alt="${area.area}" class="demand-card-image">
+                  <div class="demand-card-badge" style="background: rgba(0, 106, 212, 0.9); backdrop-filter: blur(4px);">
+                    <i class="fas ${area.icon} mr-1"></i> ${area.demand}
+                  </div>
+                  <div class="demand-card-overlay" style="background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.5), transparent);">
+                    <h3 class="demand-card-title">${area.area}</h3>
+                    <p class="text-sm text-white/90 mb-2">${area.shortDesc}</p>
+                    <div class="demand-card-stats">
+                      <span><i class="fas fa-clock mr-1"></i> ${area.eta}</span>
+                      <span><i class="fas fa-car mr-1"></i> ${area.vehicles} drivers</span>
+                    </div>
+                    <p class="text-xs text-white/80 mt-1">Peak: ${area.timeSlot}</p>
+                    <div class="demand-card-progress">
+                      <div class="demand-card-progress-bar" style="width: ${area.demand === 'Very High' ? '95%' : area.demand === 'High' ? '80%' : area.demand === 'Medium-High' ? '65%' : '50%'}"></div>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          
+          <!-- Quick Stats -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+            <div class="bg-white rounded-xl p-6 text-center shadow-md hover-card"><i class="fas fa-users text-3xl mb-3" style="color: #006ad4;"></i><p class="text-2xl font-bold text-gray-800">${registeredPassengers.length + 5000}+</p><p class="text-sm text-gray-500">Active Users</p></div>
+            <div class="bg-white rounded-xl p-6 text-center shadow-md hover-card"><i class="fas fa-car text-3xl mb-3" style="color: #006ad4;"></i><p class="text-2xl font-bold text-gray-800">${registeredDrivers.length + 200}+</p><p class="text-sm text-gray-500">Registered Drivers</p></div>
+            <div class="bg-white rounded-xl p-6 text-center shadow-md hover-card"><i class="fas fa-chart-line text-3xl mb-3" style="color: #006ad4;"></i><p class="text-2xl font-bold text-gray-800">50,000+</p><p class="text-sm text-gray-500">Successful Rides</p></div>
+            <div class="bg-white rounded-xl p-6 text-center shadow-md hover-card"><i class="fas fa-star text-3xl mb-3" style="color: #006ad4;"></i><p class="text-2xl font-bold text-gray-800">4.9/5</p><p class="text-sm text-gray-500">User Rating</p></div>
+          </div>
+          
+          <!-- CTA Section -->
+          <div class="rounded-2xl p-8 text-center text-white hover-card" style="background: linear-gradient(135deg, #006ad4 0%, #3a86ff 100%);">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4">🚀 Ready for a smarter ride?</h2>
+            <p class="text-blue-100 mb-6">Experience AI-powered transport with real-time demand prediction and offline capabilities</p>
+            <div class="flex flex-wrap gap-4 justify-center">
+              <button onclick="showPage('register')" class="px-6 py-2 bg-white rounded-lg font-semibold transition btn-press" style="color: #006ad4;">Register Now</button>
+              <button onclick="showPage('ride')" class="px-6 py-2 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-[#006ad4] transition btn-press">Book a Ride</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    
+    // ABOUT PAGE
+    function renderAboutPage() {
+      return `
+        <div class="page-transition">
+          <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">About <span class="gradient-text">ATS</span></h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Revolutionizing urban mobility in Ethiopia with AI-powered, reliable transport solutions.</p>
+          </div>
+          <div class="grid md:grid-cols-2 gap-12 mb-16">
+            <div class="space-y-6">
+              <div class="bg-white rounded-2xl p-6 shadow-lg hover-card"><div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: rgba(0, 106, 212, 0.1);"><i class="fas fa-history text-xl" style="color: #006ad4;"></i></div><h3 class="text-xl font-bold text-gray-800">Our Story</h3></div><p class="text-gray-600 leading-relaxed">Founded in 2024, ATS emerged from a simple observation: Addis Ababa's vibrant streets needed a transport system that works for everyone, regardless of internet connectivity.</p></div>
+              <div class="bg-white rounded-2xl p-6 shadow-lg hover-card"><div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: rgba(0, 106, 212, 0.1);"><i class="fas fa-brain text-xl" style="color: #006ad4;"></i></div><h3 class="text-xl font-bold text-gray-800">AI Innovation</h3></div><p class="text-gray-600 leading-relaxed">Our predictive AI analyzes millions of data points to forecast demand, optimize driver distribution, and reduce wait times.</p></div>
+            </div>
+            <div class="rounded-2xl p-8 shadow-xl text-white" style="background: linear-gradient(135deg, #006ad4 0%, #3a86ff 100%);">
+              <div class="text-center mb-6"><div class="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4 shadow-lg"><i class="fas fa-robot text-3xl" style="color: #006ad4;"></i></div><h3 class="text-2xl font-bold mb-2">Smart Transport Features</h3></div>
+              <div class="space-y-4"><div class="flex items-start gap-3"><i class="fas fa-microchip text-yellow-400 mt-1"></i><div><h4 class="font-semibold">AI-Powered Matching</h4><p class="text-sm">Intelligent algorithms match you with the nearest available driver in seconds.</p></div></div>
+              <div class="flex items-start gap-3"><i class="fas fa-chart-line text-yellow-400 mt-1"></i><div><h4 class="font-semibold">Demand Prediction</h4><p class="text-sm">Predictive analytics optimize driver distribution based on real-time demand.</p></div></div>
+              <div class="flex items-start gap-3"><i class="fas fa-map-marked-alt text-yellow-400 mt-1"></i><div><h4 class="font-semibold">Real-Time Tracking</h4><p class="text-sm">Follow your ride in real-time, even with intermittent connectivity.</p></div></div></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    
+    // PROFILES PAGE
+    function renderProfilesPage() {
+      return `
+        <div class="page-transition">
+          <div class="text-center mb-12"><h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Choose Your <span class="gradient-text">Experience</span></h1><p class="text-lg text-gray-600">Whether you're riding or driving, ATS provides a seamless experience tailored to your needs.</p></div>
+          <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover-card"><div class="relative h-48 flex items-center justify-center" style="background: linear-gradient(135deg, #006ad4 0%, #3a86ff 100%);"><i class="fas fa-user-astronaut text-7xl text-white"></i></div><div class="p-6"><h3 class="text-2xl font-bold text-gray-800">Passenger</h3><p class="text-gray-500 text-sm mb-4">For riders & commuters</p><ul class="space-y-2 mb-6"><li class="flex items-center gap-2"><i class="fas fa-check-circle" style="color: #006ad4;"></i><span>AI-powered ride matching</span></li><li class="flex items-center gap-2"><i class="fas fa-check-circle" style="color: #006ad4;"></i><span>Offline booking capability</span></li></ul><button onclick="showPage('register')" class="w-full py-3 rounded-xl font-semibold text-white btn-primary"><i class="fas fa-user-plus mr-2"></i>Register as Passenger</button></div></div>
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover-card"><div class="relative h-48 flex items-center justify-center" style="background: linear-gradient(135deg, #F4A261 0%, #E76F51 100%);"><i class="fas fa-truck-moving text-7xl text-white"></i></div><div class="p-6"><h3 class="text-2xl font-bold text-gray-800">Driver</h3><p class="text-gray-500 text-sm mb-4">Earn on your schedule</p><ul class="space-y-2 mb-6"><li class="flex items-center gap-2"><i class="fas fa-check-circle" style="color: #006ad4;"></i><span>AI-optimized routing</span></li><li class="flex items-center gap-2"><i class="fas fa-check-circle" style="color: #006ad4;"></i><span>Demand-based earnings</span></li></ul><button onclick="showPage('register')" class="w-full py-3 rounded-xl font-semibold transition btn-press border-2" style="border-color: #F4A261; color: #F4A261;"><i class="fas fa-id-card mr-2"></i>Register as Driver</button></div></div>
+          </div>
+        </div>
+      `;
+    }
+    
+    // FAQ PAGE
+    function renderFaqPage() {
+      return `
+        <div class="page-transition">
+          <div class="text-center mb-12"><h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Frequently Asked <span class="gradient-text">Questions</span></h1></div>
+          <div class="max-w-3xl mx-auto space-y-4" id="faq-container">
+            ${faqData.map((item, index) => `<div class="bg-white rounded-xl shadow-md overflow-hidden hover-card"><div class="faq-question p-5 flex justify-between items-center hover:bg-gray-50 transition cursor-pointer" data-faq="${index}"><h3 class="font-semibold text-gray-800">${item.q}</h3><i class="fas fa-chevron-down text-gray-400 transition-transform"></i></div><div class="faq-answer px-5 pb-5" id="faq-${index}"><p class="text-gray-600">${item.a}</p></div></div>`).join('')}
+          </div>
+        </div>
+      `;
+    }
+    
+    // RIDE PAGE
+    function renderRidePage() {
+      return `
+        <div class="page-transition"><div class="max-w-2xl mx-auto"><div class="text-center mb-8"><h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Book Your <span class="gradient-text">Ride</span></h1><p class="text-gray-600">AI-powered matching with nearby drivers</p></div>
+        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 hover-card"><div class="space-y-4"><div class="grid md:grid-cols-2 gap-4"><div><label class="text-sm font-medium text-gray-700 mb-2">Pickup Location</label><div class="relative"><i class="fas fa-map-marker-alt absolute left-3 top-3" style="color: #006ad4;"></i><input type="text" id="pickup-input" value="${currentPickup}" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus"></div></div><div><label class="text-sm font-medium text-gray-700 mb-2">Destination</label><div class="relative"><i class="fas fa-flag-checkered absolute left-3 top-3" style="color: #006ad4;"></i><input type="text" id="dest-input" value="${currentDestination}" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none input-focus"></div></div></div>
+        <button id="request-ride-btn" class="w-full text-white py-4 rounded-xl font-semibold transition btn-press shadow-md flex items-center justify-center gap-2 btn-primary"><i class="fas fa-robot"></i>Request Ride with AI</button>
+        <div class="border-t border-gray-200 pt-4"><h3 class="font-semibold text-gray-800 mb-3">🚗 Nearby Drivers</h3><div class="space-y-2">${mockDrivers.map(driver => `<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center" style="background-color: rgba(0,106,212,0.1);"><i class="fas fa-user" style="color: #006ad4;"></i></div><div><p class="font-semibold text-gray-800 text-sm">${driver.name}</p><p class="text-xs text-gray-500">${driver.vehicle} • ${driver.distance}</p></div></div><div class="text-right"><p class="text-sm font-bold" style="color: #006ad4;">${driver.eta}</p><p class="text-xs text-gray-400">⭐ ${driver.rating}</p></div></div>`).join('')}</div></div>
+        ${activeRideStatus !== 'idle' ? `<div class="p-4 rounded-lg text-white" style="background: linear-gradient(135deg, #006ad4 0%, #3a86ff 100%);"><div class="flex justify-between items-center mb-3"><span class="font-semibold">Ride Status</span><span class="text-xs">${activeRideStatus === 'accepted' ? 'Driver Assigned' : 'AI Searching...'}</span></div><div class="flex justify-between items-center"><div class="text-center flex-1"><div class="w-6 h-6 bg-white rounded-full flex items-center justify-center mx-auto mb-1"><i class="fas fa-check text-xs" style="color: #006ad4;"></i></div><span class="text-xs">Requested</span></div><div class="flex-1 h-1 bg-white bg-opacity-30 rounded mx-2"><div class="h-full bg-white rounded" style="width: ${activeRideStatus === 'accepted' ? '100%' : '0%'}"></div></div><div class="text-center flex-1"><div class="w-6 h-6 bg-white rounded-full flex items-center justify-center mx-auto mb-1"><i class="fas fa-car text-xs" style="color: #006ad4;"></i></div><span class="text-xs">Accepted</span></div></div>${activeRideStatus === 'accepted' ? '<p class="mt-3 text-center text-sm">🚖 Driver Abel arriving in 3 min • AA-1234</p>' : ''}</div>` : ''}
+        ${isOffline ? '<div class="mt-4 p-3 bg-yellow-100 text-yellow-800 rounded-lg text-sm text-center"><i class="fas fa-wifi mr-2"></i>Offline Mode: Your ride request will be saved locally.</div>' : ''}</div></div></div></div>
+      `;
+    }
+    
+    // SCHEDULE PAGE
+    function renderSchedulePage() {
+      return `
+        <div class="page-transition"><div class="text-center mb-12"><h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Transport <span class="gradient-text">Schedule</span></h1></div>
+        <div class="grid md:grid-cols-2 gap-8"><div class="bg-white rounded-2xl shadow-xl p-6 hover-card"><div class="flex items-center gap-3 mb-6"><i class="fas fa-bus text-3xl" style="color: #006ad4;"></i><h2 class="text-2xl font-bold">Bus Schedule</h2></div><div class="space-y-4">${busSchedule.map(item => `<div class="flex justify-between p-4 bg-gray-50 rounded-xl"><div><p class="font-semibold">${item.route}</p><p class="text-xs text-gray-500">Departure: ${item.time}</p></div><div class="text-right"><p class="text-sm font-bold" style="color: #006ad4;">${item.next}</p><p class="text-xs">${item.fare}</p></div></div>`).join('')}</div></div>
+        <div class="bg-white rounded-2xl shadow-xl p-6 hover-card"><div class="flex items-center gap-3 mb-6"><i class="fas fa-train text-3xl" style="color: #006ad4;"></i><h2 class="text-2xl font-bold">Train Schedule</h2></div><div class="space-y-4">${trainSchedule.map(item => `<div class="flex justify-between p-4 bg-gray-50 rounded-xl"><div><p class="font-semibold">${item.route}</p><p class="text-xs text-gray-500">Departure: ${item.time}</p></div><div class="text-right"><p class="text-sm font-bold" style="color: #006ad4;">${item.next}</p><p class="text-xs">${item.fare}</p></div></div>`).join('')}</div></div></div></div>
+      `;
+    }
+    
+    function renderCurrentPage() {
+      const container = document.getElementById('page-container');
+      switch(currentPage) {
+        case 'home': container.innerHTML = renderHomePage(); break;
+        case 'about': container.innerHTML = renderAboutPage(); break;
+        case 'profiles': container.innerHTML = renderProfilesPage(); break;
+        case 'register': container.innerHTML = renderRegistrationPage(); break;
+        case 'faq': container.innerHTML = renderFaqPage(); 
+          setTimeout(() => {
+            document.querySelectorAll('.faq-question').forEach(question => {
+              question.addEventListener('click', () => {
+                const faqId = question.getAttribute('data-faq');
+                const answer = document.getElementById(`faq-${faqId}`);
+                const icon = question.querySelector('i');
+                answer.classList.toggle('active');
+                if (icon) icon.style.transform = answer.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0)';
+              });
+            });
+          }, 100);
+          break;
+        case 'ride': container.innerHTML = renderRidePage();
+          setTimeout(() => {
+            const pickupInput = document.getElementById('pickup-input');
+            const destInput = document.getElementById('dest-input');
+            const requestBtn = document.getElementById('request-ride-btn');
+            if (pickupInput) pickupInput.addEventListener('input', (e) => currentPickup = e.target.value);
+            if (destInput) destInput.addEventListener('input', (e) => currentDestination = e.target.value);
+            if (requestBtn) requestBtn.addEventListener('click', requestRide);
+          }, 100);
+          break;
+        case 'schedule': container.innerHTML = renderSchedulePage(); break;
+        default: container.innerHTML = renderHomePage();
+      }
+    }
+    
+    function showPage(page) {
+      currentPage = page;
+      updateActiveNav(page);
+      renderCurrentPage();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    // Mobile Menu
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu')?.classList.toggle('hidden');
+    });
+    
+    // Initialize
+    renderCurrentPage();
+    updateOfflineUI();
+    updateNavForLogin();
+    
+    window.addEventListener('online', () => { if(isOffline) toggleOfflineMode(); else showToast("Back online! Data will sync automatically", "success"); });
+    window.addEventListener('offline', () => { if(!isOffline) toggleOfflineMode(); });
+    
+    // Expose functions globally
+    window.registerPassenger = registerPassenger;
+    window.registerDriver = registerDriver;
+    window.switchRegTab = switchRegTab;
+    window.showPage = showPage;
+    window.toggleOfflineMode = toggleOfflineMode;
+    window.requestRide = requestRide;
+    window.showLoginModal = showLoginModal;
+    window.closeLoginModal = closeLoginModal;
+    window.handleLogin = handleLogin;
+    window.logout = logout;
+  </script>
+</body>
+</html>
